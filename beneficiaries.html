@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beneficiaries — NexaBank</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .bank-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            background: #07111f;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            padding: 25px 15px;
+            z-index: 100;
+        }
+
+        .sidebar .logo {
+            padding: 0 12px;
+            margin-bottom: 45px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 20px 12px 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px;
+            border-radius: 9px;
+            color: #8fa1b7;
+            font-size: 12px;
+            transition: 0.25s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: rgba(79,140,255,0.15);
+            color: white;
+        }
+
+        .sidebar-link.active {
+            border-left: 3px solid #4f8cff;
+        }
+
+        .sidebar-link i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e7ebf1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+
+        .topbar h2 {
+            font-size: 16px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .notification {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #e7ebf1;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: #ef4444;
+            border-radius: 50%;
+            top: 7px;
+            right: 7px;
+            border: 1px solid white;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dbe8ff;
+            color: #2864d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 32px 35px 50px;
+        }
+
+        .heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .heading p {
+            color: #7b8798;
+            font-size: 12px;
+        }
+
+        .add-btn {
+            border: none;
+            background: #4f8cff;
+            color: white;
+            padding: 12px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .add-btn:hover {
+            background: #2864d7;
+        }
+
+        .add-btn i {
+            margin-right: 6px;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 14px;
+            padding: 19px;
+        }
+
+        .summary-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: #edf4ff;
+            color: #4f8cff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .summary-card span {
+            color: #94a3b8;
+            font-size: 9px;
+        }
+
+        .summary-card strong {
+            display: block;
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        /* SEARCH */
+
+        .tools {
+            background: white;
+            border: 1px solid #e7ebf1;
+            padding: 17px;
+            border-radius: 14px 14px 0 0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 39px;
+            border: 1px solid #e1e6ed;
+            border-radius: 8px;
+            padding: 0 12px 0 35px;
+            outline: none;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        .search-box input:focus {
+            border-color: #4f8cff;
+        }
+
+        .filter {
+            height: 39px;
+            border: 1px solid #e1e6ed;
+            border-radius: 8px;
+            background: white;
+            padding: 0 12px;
+            font-family: inherit;
+            font-size: 10px;
+            color: #475569;
+            outline: none;
+        }
+
+        /* BENEFICIARIES */
+
+        .beneficiary-container {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+            padding: 20px;
+        }
+
+        .beneficiary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .beneficiary {
+            border: 1px solid #e6ebf1;
+            border-radius: 13px;
+            padding: 18px;
+            transition: 0.2s;
+        }
+
+        .beneficiary:hover {
+            border-color: #b8d0ff;
+            box-shadow: 0 7px 20px rgba(30,70,120,0.06);
+        }
+
+        .beneficiary-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .person {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .person-avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: #e8f0ff;
+            color: #2864d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .person-info strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .person-info span {
+            color: #94a3b8;
+            font-size: 8px;
+        }
+
+        .menu-btn {
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .bank-info {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .bank-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .bank-row span {
+            color: #94a3b8;
+            font-size: 8px;
+        }
+
+        .bank-row strong {
+            font-size: 9px;
+            color: #475569;
+        }
+
+        .beneficiary-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            margin-top: 15px;
+        }
+
+        .beneficiary-actions button {
+            border: 1px solid #e1e6ed;
+            background: white;
+            color: #475569;
+            border-radius: 7px;
+            padding: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 8px;
+        }
+
+        .beneficiary-actions button:hover {
+            border-color: #4f8cff;
+            color: #2864d7;
+        }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        /* MODAL */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7,17,31,0.65);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            border-radius: 17px;
+            padding: 28px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+        }
+
+        .close-btn {
+            border: none;
+            background: #f1f5f9;
+            width: 31px;
+            height: 31px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 9px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #e1e6ed;
+            border-radius: 8px;
+            padding: 0 11px;
+            outline: none;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4f8cff;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        .cancel {
+            border: 1px solid #e1e6ed;
+            background: white;
+            color: #64748b;
+        }
+
+        .save {
+            border: none;
+            background: #4f8cff;
+            color: white;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1050px) {
+
+            .beneficiary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .heading {
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .sidebar .logo span {
+                display: none;
+            }
+
+            .sidebar .logo {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .menu-title,
+            .sidebar-link span {
+                display: none;
+            }
+
+            .sidebar-link {
+                justify-content: center;
+            }
+
+            .sidebar-bottom {
+                left: 10px;
+                right: 10px;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .content {
+                padding: 25px 18px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .beneficiary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tools {
+                flex-direction: column;
+            }
+
+            .filter {
+                width: 100%;
+            }
+
+        }
+
+        @media (max-width: 450px) {
+
+            .heading {
+                flex-direction: column;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="bank-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <a href="dashboard.html" class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <span>Nexa<span>Bank</span></span>
+
+        </a>
+
+
+        <div class="sidebar-menu">
+
+            <div class="menu-title">MAIN</div>
+
+            <a href="dashboard.html" class="sidebar-link">
+                <i class="fa-solid fa-grid-2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-wallet"></i>
+                <span>My Accounts</span>
+            </a>
+
+            <a href="transfer.html" class="sidebar-link">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Transfer</span>
+            </a>
+
+            <a href="cards.html" class="sidebar-link">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Cards</span>
+            </a>
+
+
+            <div class="menu-title">MANAGEMENT</div>
+
+            <a href="transactions.html" class="sidebar-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Transactions</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+
+            <a href="beneficiaries.html" class="sidebar-link active">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Beneficiaries</span>
+            </a>
+
+
+            <div class="menu-title">SETTINGS</div>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="index.html" class="sidebar-link">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <header class="topbar">
+
+            <h2>Beneficiaries</h2>
+
+            <div class="topbar-right">
+
+                <div class="notification">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="notification-dot"></span>
+
+                </div>
+
+                <div class="avatar">
+                    SK
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+
+            <!-- HEADING -->
+
+            <div class="heading">
+
+                <div>
+
+                    <h1>Saved Beneficiaries</h1>
+
+                    <p>
+                        Manage people and bank accounts you frequently transfer money to.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="add-btn"
+                    onclick="openModal()"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+                    Add Beneficiary
+
+                </button>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="summary">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <span>Total Beneficiaries</span>
+
+                    <strong id="totalCount">4</strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+
+                    <span>Bank Accounts</span>
+
+                    <strong>4</strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </div>
+
+                    <span>Transfers This Month</span>
+
+                    <strong>12</strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="tools">
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search beneficiary..."
+                        oninput="searchBeneficiaries()"
+                    >
+
+                </div>
+
+
+                <select
+                    class="filter"
+                    id="bankFilter"
+                    onchange="searchBeneficiaries()"
+                >
+
+                    <option value="all">All Banks</option>
+                    <option value="hdfc">HDFC Bank</option>
+                    <option value="sbi">State Bank of India</option>
+                    <option value="icici">ICICI Bank</option>
+                    <option value="axis">Axis Bank</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BENEFICIARY LIST -->
+
+            <div class="beneficiary-container">
+
+                <div
+                    class="beneficiary-grid"
+                    id="beneficiaryGrid"
+                >
+
+
+                    <!-- ARUN -->
+
+                    <div
+                        class="beneficiary"
+                        data-name="Arun Kumar"
+                        data-bank="hdfc"
+                    >
+
+                        <div class="beneficiary-top">
+
+                            <div class="person">
+
+                                <div class="person-avatar">
+                                    AK
+                                </div>
+
+                                <div class="person-info">
+
+                                    <strong>
+                                        Arun Kumar
+                                    </strong>
+
+                                    <span>
+                                        HDFC Bank
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="menu-btn"
+                                onclick="deleteBeneficiary(this)"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="bank-info">
+
+                            <div class="bank-row">
+
+                                <span>Account</span>
+
+                                <strong>
+                                    •••• 4521
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>IFSC</span>
+
+                                <strong>
+                                    HDFC0001234
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>Type</span>
+
+                                <strong>
+                                    Savings
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="beneficiary-actions">
+
+                            <button
+                                onclick="sendMoney('Arun Kumar')"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Send Money
+
+                            </button>
+
+                            <button
+                                onclick="editBeneficiary('Arun Kumar')"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+                                Edit
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RAHUL -->
+
+                    <div
+                        class="beneficiary"
+                        data-name="Rahul"
+                        data-bank="sbi"
+                    >
+
+                        <div class="beneficiary-top">
+
+                            <div class="person">
+
+                                <div class="person-avatar">
+                                    RK
+                                </div>
+
+                                <div class="person-info">
+
+                                    <strong>
+                                        Rahul
+                                    </strong>
+
+                                    <span>
+                                        State Bank of India
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="menu-btn"
+                                onclick="deleteBeneficiary(this)"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="bank-info">
+
+                            <div class="bank-row">
+
+                                <span>Account</span>
+
+                                <strong>
+                                    •••• 7284
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>IFSC</span>
+
+                                <strong>
+                                    SBIN0004567
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>Type</span>
+
+                                <strong>
+                                    Savings
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="beneficiary-actions">
+
+                            <button
+                                onclick="sendMoney('Rahul')"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Send Money
+
+                            </button>
+
+                            <button
+                                onclick="editBeneficiary('Rahul')"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+                                Edit
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRIYA -->
+
+                    <div
+                        class="beneficiary"
+                        data-name="Priya"
+                        data-bank="icici"
+                    >
+
+                        <div class="beneficiary-top">
+
+                            <div class="person">
+
+                                <div class="person-avatar">
+                                    PS
+                                </div>
+
+                                <div class="person-info">
+
+                                    <strong>
+                                        Priya
+                                    </strong>
+
+                                    <span>
+                                        ICICI Bank
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="menu-btn"
+                                onclick="deleteBeneficiary(this)"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="bank-info">
+
+                            <div class="bank-row">
+
+                                <span>Account</span>
+
+                                <strong>
+                                    •••• 3189
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>IFSC</span>
+
+                                <strong>
+                                    ICIC0007821
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>Type</span>
+
+                                <strong>
+                                    Savings
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="beneficiary-actions">
+
+                            <button
+                                onclick="sendMoney('Priya')"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Send Money
+
+                            </button>
+
+                            <button
+                                onclick="editBeneficiary('Priya')"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+                                Edit
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RAVI -->
+
+                    <div
+                        class="beneficiary"
+                        data-name="Ravi"
+                        data-bank="axis"
+                    >
+
+                        <div class="beneficiary-top">
+
+                            <div class="person">
+
+                                <div class="person-avatar">
+                                    RS
+                                </div>
+
+                                <div class="person-info">
+
+                                    <strong>
+                                        Ravi
+                                    </strong>
+
+                                    <span>
+                                        Axis Bank
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="menu-btn"
+                                onclick="deleteBeneficiary(this)"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="bank-info">
+
+                            <div class="bank-row">
+
+                                <span>Account</span>
+
+                                <strong>
+                                    •••• 6512
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>IFSC</span>
+
+                                <strong>
+                                    UTIB0009123
+                                </strong>
+
+                            </div>
+
+                            <div class="bank-row">
+
+                                <span>Type</span>
+
+                                <strong>
+                                    Savings
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="beneficiary-actions">
+
+                            <button
+                                onclick="sendMoney('Ravi')"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Send Money
+
+                            </button>
+
+                            <button
+                                onclick="editBeneficiary('Ravi')"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+                                Edit
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    class="empty-state"
+                    id="emptyState"
+                >
+
+                    <i class="fa-solid fa-user-slash"></i>
+
+                    <div>
+                        No beneficiaries found.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD BENEFICIARY MODAL -->
+
+<div
+    class="modal-overlay"
+    id="addModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Beneficiary</h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <form id="beneficiaryForm">
+
+
+            <div class="form-group">
+
+                <label>Beneficiary Name</label>
+
+                <input
+                    type="text"
+                    id="beneficiaryName"
+                    placeholder="Enter full name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Bank</label>
+
+                <select id="beneficiaryBank" required>
+
+                    <option value="">
+                        Select bank
+                    </option>
+
+                    <option value="hdfc">
+                        HDFC Bank
+                    </option>
+
+                    <option value="sbi">
+                        State Bank of India
+                    </option>
+
+                    <option value="icici">
+                        ICICI Bank
+                    </option>
+
+                    <option value="axis">
+                        Axis Bank
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Account Number</label>
+
+                <input
+                    type="text"
+                    id="accountNumber"
+                    placeholder="Enter account number"
+                    maxlength="18"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>IFSC Code</label>
+
+                <input
+                    type="text"
+                    id="ifsc"
+                    placeholder="Example: HDFC0001234"
+                    maxlength="11"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Account Type</label>
+
+                <select id="accountType">
+
+                    <option>
+                        Savings
+                    </option>
+
+                    <option>
+                        Current
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save"
+                >
+                    Add Beneficiary
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* OPEN MODAL */
+
+    function openModal() {
+
+        document.getElementById("addModal").style.display = "flex";
+
+    }
+
+
+    /* CLOSE MODAL */
+
+    function closeModal() {
+
+        document.getElementById("addModal").style.display = "none";
+
+    }
+
+
+    /* SEARCH */
+
+    function searchBeneficiaries() {
+
+        const search =
+            document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const bank =
+            document
+            .getElementById("bankFilter")
+            .value;
+
+        const cards =
+            document.querySelectorAll(".beneficiary");
+
+        let visible = 0;
+
+
+        cards.forEach(card => {
+
+            const name =
+                card.dataset.name.toLowerCase();
+
+            const cardBank =
+                card.dataset.bank;
+
+
+            const nameMatch =
+                name.includes(search);
+
+            const bankMatch =
+                bank === "all" ||
+                cardBank === bank;
+
+
+            if (nameMatch && bankMatch) {
+
+                card.style.display = "";
+
+                visible++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        document.getElementById("emptyState").style.display =
+            visible === 0 ? "block" : "none";
+
+    }
+
+
+    /* SEND MONEY */
+
+    function sendMoney(name) {
+
+        window.location.href =
+            "transfer.html?recipient=" +
+            encodeURIComponent(name);
+
+    }
+
+
+    /* EDIT */
+
+    function editBeneficiary(name) {
+
+        alert(
+            "Edit beneficiary: " +
+            name +
+            "\n\nDatabase editing will be connected when PHP + MySQL is added."
+        );
+
+    }
+
+
+    /* DELETE */
+
+    function deleteBeneficiary(button) {
+
+        const card =
+            button.closest(".beneficiary");
+
+        const name =
+            card.dataset.name;
+
+
+        const confirmDelete =
+            confirm(
+                "Remove " +
+                name +
+                " from your beneficiaries?"
+            );
+
+
+        if (confirmDelete) {
+
+            card.remove();
+
+            const remaining =
+                document.querySelectorAll(".beneficiary").length;
+
+            document.getElementById("totalCount").textContent =
+                remaining;
+
+            searchBeneficiaries();
+
+        }
+
+    }
+
+
+    /* ADD BENEFICIARY */
+
+    document
+        .getElementById("beneficiaryForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                .getElementById("beneficiaryName")
+                .value
+                .trim();
+
+            const bank =
+                document
+                .getElementById("beneficiaryBank")
+                .value;
+
+            const account =
+                document
+                .getElementById("accountNumber")
+                .value
+                .trim();
+
+            const ifsc =
+                document
+                .getElementById("ifsc")
+                .value
+                .trim()
+                .toUpperCase();
+
+            const type =
+                document
+                .getElementById("accountType")
+                .value;
+
+
+            if (
+                !name ||
+                !bank ||
+                !account ||
+                !ifsc
+            ) {
+
+                alert("Please fill all fields.");
+
+                return;
+
+            }
+
+
+            const bankNames = {
+
+                hdfc: "HDFC Bank",
+                sbi: "State Bank of India",
+                icici: "ICICI Bank",
+                axis: "Axis Bank"
+
+            };
+
+
+            const initials =
+                name
+                .split(" ")
+                .map(word => word[0])
+                .join("")
+                .substring(0, 2)
+                .toUpperCase();
+
+
+            const maskedAccount =
+                "•••• " +
+                account.slice(-4);
+
+
+            const card =
+                document.createElement("div");
+
+            card.className = "beneficiary";
+
+            card.dataset.name = name;
+            card.dataset.bank = bank;
+
+
+            card.innerHTML = `
+
+                <div class="beneficiary-top">
+
+                    <div class="person">
+
+                        <div class="person-avatar">
+                            ${initials}
+                        </div>
+
+                        <div class="person-info">
+
+                            <strong>
+                                ${name}
+                            </strong>
+
+                            <span>
+                                ${bankNames[bank]}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="menu-btn"
+                        onclick="deleteBeneficiary(this)"
+                    >
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="bank-info">
+
+                    <div class="bank-row">
+
+                        <span>Account</span>
+
+                        <strong>
+                            ${maskedAccount}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="bank-row">
+
+                        <span>IFSC</span>
+
+                        <strong>
+                            ${ifsc}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="bank-row">
+
+                        <span>Type</span>
+
+                        <strong>
+                            ${type}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="beneficiary-actions">
+
+                    <button
+                        onclick="sendMoney('${name.replace(/'/g, "\\'")}')"
+                    >
+
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Send Money
+
+                    </button>
+
+                    <button
+                        onclick="editBeneficiary('${name.replace(/'/g, "\\'")}')"
+                    >
+
+                        <i class="fa-solid fa-pen"></i>
+                        Edit
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            document
+                .getElementById("beneficiaryGrid")
+                .appendChild(card);
+
+
+            const count =
+                document.querySelectorAll(".beneficiary").length;
+
+            document.getElementById("totalCount").textContent =
+                count;
+
+
+            document
+                .getElementById("beneficiaryForm")
+                .reset();
+
+
+            closeModal();
+
+
+            alert(
+                name +
+                " has been added as a beneficiary."
+            );
+
+        });
+
+
+    /* CLOSE WHEN CLICKING OUTSIDE */
+
+    document
+        .getElementById("addModal")
+        .addEventListener("click", function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        });
+
+</script>
+
+</body>
+</html>

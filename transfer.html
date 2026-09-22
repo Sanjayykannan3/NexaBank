@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Transfer Money — NexaBank</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .transfer-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            background: #07111f;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            padding: 25px 15px;
+            z-index: 100;
+        }
+
+        .sidebar .logo {
+            padding: 0 12px;
+            margin-bottom: 45px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 20px 12px 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px;
+            border-radius: 9px;
+            color: #8fa1b7;
+            font-size: 12px;
+            transition: 0.25s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: rgba(79,140,255,0.15);
+            color: white;
+        }
+
+        .sidebar-link.active {
+            border-left: 3px solid #4f8cff;
+        }
+
+        .sidebar-link i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        /* MAIN */
+
+        .transfer-main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e7ebf1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+
+        .topbar h2 {
+            font-size: 16px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .notification {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #e7ebf1;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dbe8ff;
+            color: #2864d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* PAGE */
+
+        .transfer-content {
+            max-width: 1100px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-heading h1 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .page-heading p {
+            color: #7b8798;
+            font-size: 12px;
+        }
+
+        .transfer-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 0.75fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .transfer-card,
+        .summary-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 16px;
+            padding: 27px;
+        }
+
+        /* STEPS */
+
+        .steps {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .step-number {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2f7;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .step.active {
+            color: #2864d7;
+        }
+
+        .step.active .step-number {
+            background: #2864d7;
+            color: white;
+        }
+
+        .step-line {
+            height: 1px;
+            background: #e7ebf1;
+            width: 60px;
+            margin: 0 10px;
+        }
+
+        /* FORM */
+
+        .form-section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 17px;
+        }
+
+        .section-title-icon {
+            width: 30px;
+            height: 30px;
+            background: #edf4ff;
+            color: #4f8cff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .section-title h3 {
+            font-size: 13px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 7px;
+            color: #475569;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 12px 37px;
+            border: 1px solid #e0e5eb;
+            background: #fafbfc;
+            border-radius: 8px;
+            outline: none;
+            font-family: inherit;
+            color: #172033;
+            font-size: 11px;
+            transition: 0.2s;
+        }
+
+        .input-wrapper input:focus,
+        .input-wrapper select:focus {
+            border-color: #4f8cff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79,140,255,0.08);
+        }
+
+        .input-wrapper select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+            font-size: 9px;
+        }
+
+        /* BALANCE */
+
+        .balance-info {
+            margin-top: 7px;
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 9px;
+        }
+
+        .balance-info strong {
+            color: #16a67d;
+        }
+
+        /* BENEFICIARIES */
+
+        .beneficiary-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            overflow-x: auto;
+        }
+
+        .beneficiary {
+            min-width: 90px;
+            border: 1px solid #e7ebf1;
+            border-radius: 10px;
+            padding: 11px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .beneficiary:hover,
+        .beneficiary.selected {
+            border-color: #4f8cff;
+            background: #f4f8ff;
+        }
+
+        .beneficiary-avatar {
+            width: 30px;
+            height: 30px;
+            margin: auto auto 6px;
+            border-radius: 50%;
+            background: #e8effc;
+            color: #2864d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .beneficiary strong {
+            display: block;
+            font-size: 9px;
+        }
+
+        .beneficiary span {
+            color: #94a3b8;
+            font-size: 8px;
+        }
+
+        /* AMOUNT */
+
+        .amount-box {
+            text-align: center;
+            padding: 22px 10px;
+            border: 1px solid #e0e5eb;
+            border-radius: 10px;
+            background: #fafbfc;
+        }
+
+        .amount-box span {
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .amount-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            outline: none;
+            font-size: 34px;
+            font-weight: 700;
+            color: #172033;
+            margin-top: 5px;
+        }
+
+        .amount-input::placeholder {
+            color: #c4cbd4;
+        }
+
+        /* BUTTON */
+
+        .continue-btn {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 14px;
+        }
+
+        /* SUMMARY */
+
+        .summary-card {
+            position: sticky;
+            top: 25px;
+        }
+
+        .summary-card h3 {
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .summary-account {
+            background: #07111f;
+            color: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .summary-account small {
+            color: #8fa1b7;
+            font-size: 8px;
+        }
+
+        .summary-account strong {
+            display: block;
+            font-size: 17px;
+            margin: 4px 0;
+        }
+
+        .summary-account span {
+            color: #8fa1b7;
+            font-size: 9px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 10px;
+        }
+
+        .summary-row span:first-child {
+            color: #94a3b8;
+        }
+
+        .summary-row strong {
+            font-weight: 600;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid #e7ebf1;
+        }
+
+        .summary-total span {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .summary-total strong {
+            font-size: 18px;
+        }
+
+        .secure-note {
+            margin-top: 20px;
+            padding: 12px;
+            background: #f0fbf7;
+            border: 1px solid #d6f2e7;
+            border-radius: 9px;
+            display: flex;
+            gap: 9px;
+            font-size: 9px;
+            color: #64748b;
+        }
+
+        .secure-note i {
+            color: #16a67d;
+        }
+
+        /* SUCCESS */
+
+        .success-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7,17,31,0.72);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .success-modal {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            text-align: center;
+            animation: pop 0.25s ease;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            margin: auto auto 20px;
+            background: #e7f9f2;
+            color: #16a67d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .success-modal h2 {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .success-modal p {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .success-amount {
+            font-size: 27px;
+            font-weight: 700;
+            margin: 18px 0;
+        }
+
+        .transaction-id {
+            background: #f7f9fb;
+            border-radius: 8px;
+            padding: 11px;
+            color: #64748b;
+            font-size: 9px;
+            margin-bottom: 20px;
+        }
+
+        .close-success {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .transfer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .sidebar .logo span {
+                display: none;
+            }
+
+            .sidebar .logo {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .menu-title,
+            .sidebar-link span {
+                display: none;
+            }
+
+            .sidebar-link {
+                justify-content: center;
+            }
+
+            .sidebar-bottom {
+                left: 10px;
+                right: 10px;
+            }
+
+            .transfer-main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .transfer-content {
+                padding: 25px 18px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .transfer-card,
+            .summary-card {
+                padding: 20px;
+            }
+
+            .step-line {
+                width: 25px;
+            }
+
+            .step span:not(.step-number) {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<div class="transfer-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <a href="dashboard.html" class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <span>Nexa<span>Bank</span></span>
+
+        </a>
+
+
+        <div class="sidebar-menu">
+
+            <div class="menu-title">MAIN</div>
+
+            <a href="dashboard.html" class="sidebar-link">
+                <i class="fa-solid fa-grid-2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-wallet"></i>
+                <span>My Accounts</span>
+            </a>
+
+            <a href="transfer.html" class="sidebar-link active">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Transfer</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Cards</span>
+            </a>
+
+
+            <div class="menu-title">MANAGEMENT</div>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Transactions</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Beneficiaries</span>
+            </a>
+
+
+            <div class="menu-title">SETTINGS</div>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="index.html" class="sidebar-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="transfer-main">
+
+
+        <header class="topbar">
+
+            <h2>Transfer Money</h2>
+
+            <div class="topbar-right">
+
+                <div class="notification">
+                    <i class="fa-regular fa-bell"></i>
+                </div>
+
+                <div class="avatar">
+                    SK
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="transfer-content">
+
+
+            <div class="page-heading">
+
+                <h1>Send Money</h1>
+
+                <p>
+                    Transfer funds securely to another NexaBank account.
+                </p>
+
+            </div>
+
+
+            <div class="transfer-grid">
+
+
+                <!-- FORM -->
+
+                <div class="transfer-card">
+
+
+                    <div class="steps">
+
+                        <div class="step active">
+                            <span class="step-number">1</span>
+                            <span>Recipient</span>
+                        </div>
+
+                        <div class="step-line"></div>
+
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span>Amount</span>
+                        </div>
+
+                        <div class="step-line"></div>
+
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span>Confirm</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- FROM ACCOUNT -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <div class="section-title-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+
+                            <h3>From Account</h3>
+
+                        </div>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-building-columns"></i>
+
+                            <select id="fromAccount">
+
+                                <option value="savings">
+                                    Savings Account — •••• 4829
+                                </option>
+
+                                <option value="current">
+                                    Current Account — •••• 7316
+                                </option>
+
+                            </select>
+
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                        </div>
+
+
+                        <div class="balance-info">
+
+                            <span>Available balance</span>
+
+                            <strong>
+                                ₹82,450.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BENEFICIARY -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <div class="section-title-icon">
+                                <i class="fa-solid fa-user-group"></i>
+                            </div>
+
+                            <h3>Select Beneficiary</h3>
+
+                        </div>
+
+
+                        <div class="beneficiary-row">
+
+
+                            <div class="beneficiary selected"
+                                 onclick="selectBeneficiary(this, 'Arun Kumar')">
+
+                                <div class="beneficiary-avatar">
+                                    AK
+                                </div>
+
+                                <strong>Arun Kumar</strong>
+
+                                <span>•••• 2108</span>
+
+                            </div>
+
+
+                            <div class="beneficiary"
+                                 onclick="selectBeneficiary(this, 'Rahul')">
+
+                                <div class="beneficiary-avatar">
+                                    RK
+                                </div>
+
+                                <strong>Rahul</strong>
+
+                                <span>•••• 6732</span>
+
+                            </div>
+
+
+                            <div class="beneficiary"
+                                 onclick="selectBeneficiary(this, 'Priya')">
+
+                                <div class="beneficiary-avatar">
+                                    PS
+                                </div>
+
+                                <strong>Priya</strong>
+
+                                <span>•••• 4581</span>
+
+                            </div>
+
+
+                            <div class="beneficiary"
+                                 onclick="selectBeneficiary(this, 'New')">
+
+                                <div class="beneficiary-avatar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+
+                                <strong>New</strong>
+
+                                <span>Add</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT DETAILS -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <div class="section-title-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+
+                            <h3>Recipient Details</h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label>Recipient Name</label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                    <input
+                                        type="text"
+                                        id="recipientName"
+                                        value="Arun Kumar"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Account Number</label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-solid fa-hashtag"></i>
+
+                                    <input
+                                        type="text"
+                                        id="accountNumber"
+                                        value="XXXXXX2108"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>IFSC Code</label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-solid fa-building"></i>
+
+                                    <input
+                                        type="text"
+                                        id="ifsc"
+                                        value="NXBK0001234"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Transfer Type</label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-solid fa-bolt"></i>
+
+                                    <select>
+
+                                        <option>
+                                            Instant Transfer
+                                        </option>
+
+                                        <option>
+                                            Standard Transfer
+                                        </option>
+
+                                    </select>
+
+                                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <div class="section-title-icon">
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                            </div>
+
+                            <h3>Transfer Amount</h3>
+
+                        </div>
+
+
+                        <div class="amount-box">
+
+                            <span>Enter amount</span>
+
+                            <input
+                                class="amount-input"
+                                id="amount"
+                                type="number"
+                                min="1"
+                                placeholder="₹ 0"
+                            >
+
+                        </div>
+
+
+                        <div class="balance-info">
+
+                            <span>
+                                Daily transfer limit: ₹1,00,000
+                            </span>
+
+                            <strong>
+                                Available: ₹82,450
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTE -->
+
+                    <div class="form-section">
+
+                        <div class="form-group">
+
+                            <label>
+                                Transfer Note
+                                <span style="font-weight:400;color:#94a3b8;">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-note-sticky"></i>
+
+                                <input
+                                    type="text"
+                                    id="note"
+                                    placeholder="What's this payment for?"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="primary-btn continue-btn"
+                        onclick="processTransfer()"
+                    >
+
+                        Continue to Review
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <aside class="summary-card">
+
+                    <h3>Transfer Summary</h3>
+
+
+                    <div class="summary-account">
+
+                        <small>PAYING FROM</small>
+
+                        <strong>
+                            ₹82,450.00
+                        </strong>
+
+                        <span>
+                            Savings Account •••• 4829
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Recipient</span>
+
+                        <strong id="summaryRecipient">
+                            Arun Kumar
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Transfer fee</span>
+
+                        <strong>
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Transfer type</span>
+
+                        <strong>
+                            Instant
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-total">
+
+                        <span>Total</span>
+
+                        <strong id="summaryTotal">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="secure-note">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        <span>
+                            Transfers are protected by NexaBank
+                            transaction security.
+                        </span>
+
+                    </div>
+
+                </aside>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- SUCCESS MODAL -->
+
+<div class="success-overlay" id="successOverlay">
+
+    <div class="success-modal">
+
+        <div class="success-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <h2>Transfer Successful</h2>
+
+        <p>
+            Your transfer has been processed successfully.
+        </p>
+
+
+        <div class="success-amount" id="successAmount">
+            ₹0
+        </div>
+
+
+        <div class="transaction-id">
+
+            Transaction ID:
+            <strong>
+                NXB202609210001
+            </strong>
+
+        </div>
+
+
+        <button
+            class="primary-btn close-success"
+            onclick="closeSuccess()"
+        >
+
+            Back to Dashboard
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let selectedRecipient = "Arun Kumar";
+
+
+    function selectBeneficiary(element, name) {
+
+        document
+            .querySelectorAll(".beneficiary")
+            .forEach(item => {
+                item.classList.remove("selected");
+            });
+
+        element.classList.add("selected");
+
+        if (name === "New") {
+
+            alert("Add beneficiary screen will be built next.");
+
+            return;
+        }
+
+        selectedRecipient = name;
+
+        document.getElementById("recipientName").value = name;
+
+        document.getElementById("summaryRecipient").textContent = name;
+
+    }
+
+
+    const amountInput =
+        document.getElementById("amount");
+
+
+    const summaryTotal =
+        document.getElementById("summaryTotal");
+
+
+    amountInput.addEventListener("input", function () {
+
+        let amount = Number(this.value);
+
+        if (amount < 0) {
+            amount = 0;
+        }
+
+        summaryTotal.textContent =
+            "₹" + amount.toLocaleString("en-IN", {
+                minimumFractionDigits: 2
+            });
+
+    });
+
+
+    function processTransfer() {
+
+        const amount =
+            Number(document.getElementById("amount").value);
+
+
+        const recipient =
+            document.getElementById("recipientName").value.trim();
+
+
+        if (!recipient) {
+
+            alert("Please enter the recipient name.");
+
+            return;
+        }
+
+
+        if (!amount || amount <= 0) {
+
+            alert("Please enter a valid transfer amount.");
+
+            return;
+        }
+
+
+        if (amount > 82450) {
+
+            alert("Insufficient balance.");
+
+            return;
+        }
+
+
+        if (amount > 100000) {
+
+            alert("Amount exceeds the daily transfer limit.");
+
+            return;
+        }
+
+
+        document.getElementById("successAmount").textContent =
+            "₹" + amount.toLocaleString("en-IN", {
+                minimumFractionDigits: 2
+            });
+
+
+        document.getElementById("successOverlay").style.display =
+            "flex";
+
+    }
+
+
+    function closeSuccess() {
+
+        window.location.href = "dashboard.html";
+
+    }
+
+</script>
+
+</body>
+</html>
